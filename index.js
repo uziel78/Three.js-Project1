@@ -14,11 +14,6 @@ const camera = new THREE.PerspectiveCamera(
 // * Create a renderer
 const renderer = new THREE.WebGLRenderer();
 
-// * tests
-console.log(scene);
-console.log(camera);
-console.log(renderer);
-
 // * Set the size of the renderer (full screen)
 renderer.setSize(window.innerWidth, window.innerHeight);
 // * Set the pixel ratio of the renderer
@@ -28,21 +23,26 @@ renderer.setPixelRatio(window.devicePixelRatio);
 // * append the renderer to the body element
 document.body.appendChild(renderer.domElement);
 
-// * Create a box
+// * ----- Create a box -----
+
 const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 // * Create a material
 const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 
-console.log(boxGeometry);
-console.log(material);
-
 // * Create a mesh using the box geometry and material
 const mesh = new THREE.Mesh(boxGeometry, material);
 
-console.log(mesh);
-
 // * Add the mesh to the scene
 scene.add(mesh);
+
+// * ----- create a plane geometry -----
+
+const planeGeometry = new THREE.PlaneGeometry(5, 5, 10, 10);
+const planeMaterial = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+});
+const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
+scene.add(planeMesh);
 
 // * Set the camera position
 camera.position.z = 5;
@@ -55,9 +55,6 @@ function animate() {
   mesh.rotation.x += 0.01;
   mesh.rotation.y += 0.01;
 }
-
-// * call the render function (only displays the scene once outside the animate function)
-// renderer.render(scene, camera);
 
 // * call the animate function
 animate();
