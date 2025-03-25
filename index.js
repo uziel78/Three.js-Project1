@@ -44,5 +44,17 @@ scene.add(mesh);
 // * Set the camera position
 camera.position.z = 5;
 
-// * call the render function
-renderer.render(scene, camera);
+// * Create a render function for animation (loops through the scene)
+function animate() {
+  requestAnimationFrame(animate);
+  // * call the render function
+  renderer.render(scene, camera);
+  mesh.rotation.x += 0.01;
+  mesh.rotation.y += 0.01;
+}
+
+// * call the render function (only displays the scene once outside the animate function)
+// renderer.render(scene, camera);
+
+// * call the animate function
+animate();
