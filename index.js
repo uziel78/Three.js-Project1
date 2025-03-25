@@ -23,37 +23,44 @@ renderer.setPixelRatio(window.devicePixelRatio);
 // * append the renderer to the body element
 document.body.appendChild(renderer.domElement);
 
-// * ----- Create a box -----
-
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-// * Create a material
-const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-
-// * Create a mesh using the box geometry and material
-const mesh = new THREE.Mesh(boxGeometry, material);
-
-// * Add the mesh to the scene
-scene.add(mesh);
+// * Set the camera position
+camera.position.z = 10; // should be 5
 
 // * ----- create a plane geometry -----
 
 const planeGeometry = new THREE.PlaneGeometry(5, 5, 10, 10);
-const planeMaterial = new THREE.MeshBasicMaterial({
+const planeMaterial = new THREE.MeshPhongMaterial({
   color: 0xff0000,
+  side: THREE.DoubleSide,
+  flatShading: true,
 });
+// * Create a mesh
 const planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
 scene.add(planeMesh);
 
-// * Set the camera position
-camera.position.z = 5;
+const { array } = planeMesh.geometry.attributes.position;
+
+for (let i = 0; i < array.length; i += 3) {
+  //console.log(array[i]);
+  const x = array[i];
+  const y = array[i + 1];
+  const z = array[i + 2];
+
+  array[i + 2] = z + Math.random();
+}
+
+planeMesh.geometry.attributes.position.needsUpdate = true;
+
+// * Create a light
+const light = new THREE.DirectionalLight(0xffffff, 1);
+light.position.set(0, 0, 1);
+scene.add(light);
 
 // * Create a render function for animation (loops through the scene)
 function animate() {
   requestAnimationFrame(animate);
   // * call the render function
   renderer.render(scene, camera);
-  mesh.rotation.x += 0.01;
-  mesh.rotation.y += 0.01;
 }
 
 // * call the animate function
