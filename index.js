@@ -21,6 +21,9 @@ console.log(renderer);
 
 // * Set the size of the renderer (full screen)
 renderer.setSize(window.innerWidth, window.innerHeight);
+// * Set the pixel ratio of the renderer
+// * This is used to render the scene at a higher resolution than the screen and then downscale it to the screen resolution
+renderer.setPixelRatio(window.devicePixelRatio);
 
 // * append the renderer to the body element
 document.body.appendChild(renderer.domElement);
