@@ -1,34 +1,56 @@
+// * Imports
 import * as THREE from 'three';
+import * as dat from 'dat.gui';
+console.log(dat);
 
-// * Create a scene
+// * instantiate the dat.gui slider
+const gui = new dat.GUI();
+//console.log(gui);
+
+const world = {
+  plane: {
+    width: 10,
+    height: 10,
+    widthSegments: 10,
+    heightSegments: 10,
+  },
+};
+
+// * gui sliders
+gui.add(world.plane, 'height', 1, 500).onChange(generatePlane);
+gui.add(world.plane, 'widthSegments', 1, 100).onChange(generatePlane);
+gui.add(world.plane, 'heightSegments', 1, 100).onChange(generatePlane);
+
+function generatePlane() {
+  planeMesh.geometry.dispose();
+  planeMesh.geometry = new THREE.PlaneGeometry(
+    world.plane.width,
+    world.plane.height,
+    world.plane.widthSegments,
+    world.plane.heightSegments
+  );
+}
+
+// * ----- Scene, Camera & Renderer -----
+
 const scene = new THREE.Scene();
-
-// * Create a camera
 const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
   1000
 );
-
-// * Create a renderer
 const renderer = new THREE.WebGLRenderer();
-
-// * Set the size of the renderer (full screen)
 renderer.setSize(window.innerWidth, window.innerHeight);
-// * Set the pixel ratio of the renderer
-// * This is used to render the scene at a higher resolution than the screen and then downscale it to the screen resolution
 renderer.setPixelRatio(window.devicePixelRatio);
-
-// * append the renderer to the body element
 document.body.appendChild(renderer.domElement);
 
 // * Set the camera position
-camera.position.z = 10; // should be 5
+camera.position.z = 5;
 
 // * ----- create a plane geometry -----
 
-const planeGeometry = new THREE.PlaneGeometry(5, 5, 10, 10);
+const planeGeometry = new THREE.PlaneGeometry(5, 5, 5, 5);
 const planeMaterial = new THREE.MeshPhongMaterial({
   color: 0xff0000,
   side: THREE.DoubleSide,
@@ -53,15 +75,8 @@ planeMesh.geometry.attributes.position.needsUpdate = true;
 
 // * Create a light
 const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(0, 0, 1);
+light.position.set(1, 0, 1);
 scene.add(light);
 
-// * Create a render function for animation (loops through the scene)
-function animate() {
-  requestAnimationFrame(animate);
-  // * call the render function
-  renderer.render(scene, camera);
-}
-
-// * call the animate function
-animate();
+// * ----- Renderer -----
+renderer.render(scene, camera);
